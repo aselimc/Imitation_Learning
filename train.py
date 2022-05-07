@@ -14,7 +14,7 @@ global device
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
-def read_data(dataset_dir: AnyStr = "./data", frac: int = 0.1) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+def read_data(dataset_dir= "./data", frac: int = 0.1) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     To read the data from zip file
     Args:
