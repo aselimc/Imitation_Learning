@@ -6,7 +6,7 @@ class CNN(nn.Module):
     def __init__(self, history_length=5, n_classes=5):
         super(CNN, self).__init__()
         self.sequential = nn.Sequential(
-            nn.Conv2d(in_channels=5, out_channels=16, kernel_size=3, stride=2),
+            nn.Conv2d(in_channels=history_length, out_channels=16, kernel_size=3, stride=2),
             nn.ReLU(),
             nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3),
             nn.ReLU(),
