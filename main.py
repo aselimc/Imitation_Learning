@@ -1,0 +1,35 @@
+import argparse
+import sys
+
+import torch
+
+from train import *
+
+
+def main():
+    sys.path.append("../")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--history_length", default=5)
+    parser.add_argument("--save", default=True)
+    parser.add_argument("--batch_size", default=16)
+    parser.add_argument("--epochs", default=3)
+    parser.add_argument("--lr", default=1e-4)
+    parser.add_argument("--study_name", default="training")
+    args = parser.parse_args()
+    if args.save:
+        print(f"Reading Data")
+        data = read_data("./data")
+        print(f"Image count {data[0].shape[0]}")
+        print(f"Preprocessing")
+        train_data, validation, weights = preprocessing(*data, args.save, args.history_length)
+    else:
+        print(f"Reading Data")
+        train_data = torch.load("./data/training")
+        validation = torch.load("./data/validation")
+        weights = torch.load("./data/sample_weight")
+    print(f"Training")
+    train_model(train_data, validation, weights, args.batch_size, args.epochs, args.lr, args.study_name)
+
+
+if __name__ == "__main__":
+    main()

@@ -9,6 +9,8 @@ LEFT = 1
 RIGHT = 2
 ACCELERATE = 3
 BRAKE = 4
+global device
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 def rgb2gray(rgb: np.ndarray) -> np.ndarray:
@@ -63,7 +65,7 @@ def single_image_processing(image: np.ndarray) -> np.ndarray:
     return image
 
 
-def action_to_id(a: List[float, float, float]) -> int:
+def action_to_id(a: List) -> int:
     """
     This method discretizes the actions.
     Important: this method only works if you recorded data pressing only one key at a time!
@@ -105,15 +107,19 @@ def id_to_action(action_id: int, max_speed: int = 0.8) -> np.ndarray:
 
 
 def history_stack(x: np.ndarray, history_length: int) -> Tuple[np.ndarray, np.ndarray]:
+    bs = x.shape[0]
     init = 0
     latter = init + history_length
     extended_array = np.array([x[0]] * (history_length - 1))
-    extended_array = np.concatenate((extended_array, x)) if x.size else x
-    new_x = np.empty(shape=(x.shape[0], history_length, 96, 96))
+    extended_array = np.concatenate((extended_array, x)) if history_length > 1 else x
+    del x
+    new_x = np.empty(shape=(bs, history_length, 96, 96))
     while latter != len(extended_array):
-        new_x[init] = np.stack(x[init:latter])
+        new_x[init] = np.stack(extended_array[init:latter])
         init += 1
         latter += 1
+    del extended_array
+    new_x = torch.HalfTensor(new_x).to(device)
     return new_x
 
 

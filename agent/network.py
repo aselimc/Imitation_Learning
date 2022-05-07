@@ -3,10 +3,10 @@ import torch.nn as nn
 
 class CNN(nn.Module):
 
-    def __init__(self, history_length=0, n_classes=5):
+    def __init__(self, history_length=5, n_classes=5):
         super(CNN, self).__init__()
         self.sequential = nn.Sequential(
-            nn.Conv2d(in_channels=history_length + 1, out_channels=16, kernel_size=3, stride=2),
+            nn.Conv2d(in_channels=5, out_channels=16, kernel_size=3, stride=2),
             nn.ReLU(),
             nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3),
             nn.ReLU(),
@@ -19,7 +19,7 @@ class CNN(nn.Module):
         )
         self.sequential_fc = nn.Sequential(
             nn.Flatten(),
-            nn.Linear(128*7*7, 128),
+            nn.Linear(128*9*9, 128),
             nn.Linear(128, n_classes)
         )
 
