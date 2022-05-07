@@ -22,8 +22,8 @@ def rgb2gray(rgb: np.ndarray) -> np.ndarray:
     Returns:
     Grayscale output with shape (batch_size, height, weight)
     """
-    gray = np.dot(rgb[..., :3], [0.2125, 0.7154, 0.0721])
-    return gray.astype('float32')
+    gray = np.dot(rgb[..., :3], [0.2125, 0.7154, 0.0721]).astype("float32")
+    return gray
 
 
 def image_processing(x: np.ndarray):
