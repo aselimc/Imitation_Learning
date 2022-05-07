@@ -32,3 +32,4 @@ class BCAgent:
 
     def save(self, f_name):
         torch.save(self.net.state_dict(), f_name)
+        return f_name
