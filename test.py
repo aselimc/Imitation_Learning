@@ -41,7 +41,7 @@ def run_episode(env, agent, hl, rendering=True, max_timesteps=2000):
 
         a = agent.predict(hist).detach().cpu().numpy().argmax(1)
         if np.array_equal(state, state_1) and np.array_equal(state, state_2):
-            counter = 15
+            counter = 10
             print("Agent got stuck, initial push is given to continue")
         if counter > 0:
             a = 3

@@ -38,8 +38,8 @@ def preprocessing(x_train: np.ndarray, y_train: np.ndarray, x_valid: np.ndarray,
                   , history_length: int = 1):
     # x_train = image_processing(x_train)
     # x_valid = image_processing(x_valid)
-    x_train = rgb2gray(x_train)
-    x_valid = rgb2gray(x_valid)
+    x_train = image_processing(x_train)
+    x_valid = image_processing(x_valid)
     y_train = torch.LongTensor([action_to_id(action) for action in y_train]).to(device)
     y_valid = torch.HalfTensor([action_to_id(action) for action in y_valid]).to(device)
     class_sample_count = torch.ShortTensor([len(torch.where(y_train == t)[0]) for t in torch.unique(y_train)])
