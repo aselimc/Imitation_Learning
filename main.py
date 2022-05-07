@@ -11,7 +11,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--history_length", default=5)
     parser.add_argument("--save", default=True)
-    parser.add_argument("--batch_size", default=16)
+    parser.add_argument("--batch_size", default=64)
     parser.add_argument("--epochs", default=3)
     parser.add_argument("--lr", default=1e-4)
     parser.add_argument("--study_name", default="training")

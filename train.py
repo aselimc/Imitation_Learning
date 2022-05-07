@@ -31,7 +31,7 @@ def read_data(dataset_dir= "./data", frac: int = 0.1) -> Tuple[np.ndarray, np.nd
     length = x.shape[0]
     x_train, y_train = x[:int((1 - frac) * length)], y[:int((1 - frac) * length)]
     x_valid, y_valid = x[int((1 - frac) * length):], y[int((1 - frac) * length):]
-    return x_train[:10000], y_train[:10000], x_valid[:500], y_valid[:500]
+    return x_train[:20000], y_train[:20000], x_valid[:1000], y_valid[:1000]
 
 
 def preprocessing(x_train: np.ndarray, y_train: np.ndarray, x_valid: np.ndarray, y_valid: np.ndarray, save: bool = False
