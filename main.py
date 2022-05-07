@@ -21,14 +21,15 @@ def main():
         data = read_data("./data")
         print(f"Image count {data[0].shape[0]}")
         print(f"Preprocessing")
-        train_data, validation, weights = preprocessing(*data, args.save, args.history_length)
+        train_data, validation, weights = preprocessing(*data, bool(args.save), int(args.history_length))
     else:
         print(f"Reading Data")
         train_data = torch.load("./data/training")
         validation = torch.load("./data/validation")
         weights = torch.load("./data/sample_weight")
     print(f"Training")
-    train_model(train_data, validation, weights, args.batch_size, args.epochs, args.lr, args.study_name)
+    train_model(train_data, validation, weights, int(args.batch_size), int(args.epochs), float(args.lr),
+                args.study_name)
 
 
 if __name__ == "__main__":
