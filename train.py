@@ -43,8 +43,8 @@ def preprocessing(x_train: np.ndarray, y_train: np.ndarray, x_valid: np.ndarray,
     class_sample_count = np.array([len(np.where(y_train == t)[0]) for t in np.unique(y_train)])
     weights = 1. / class_sample_count
     samples_weight = torch.from_numpy(np.array([weights[t] for t in y_train])).to(device)
-    x_train, y_train = history_stack(x_train, y_train, history_length)
-    x_valid, y_valid = history_stack(x_valid, y_valid, history_length)
+    x_train = history_stack(x_train, history_length)
+    x_valid = history_stack(x_valid, history_length)
     training_dataset = TensorDataset(torch.from_numpy(x_train).to(device), torch.from_numpy(y_train).to(device))
     validation_dataset = TensorDataset(torch.from_numpy(x_valid), torch.from_numpy(y_valid))
     if save:
@@ -68,8 +68,31 @@ def train_model(training_dataset: TensorDataset, validation_dataset: TensorDatas
     sampler = torch.utils.data.WeightedRandomSampler(weights=samples_weight, num_samples=len(samples_weight))
     train_loader = DataLoader(training_dataset, sampler=sampler, batch_size=batch_size, pin_memory=True,
                               shuffle=True)
-    validation_loader = DataLoader(validation_dataset, batch_size=batch_size * 12, pin_memory=True, shuffle=True)
-    t_loss, t_acc, v_acc = 0, 0, 0
+    validation_loader = DataLoader(validation_dataset, batch_size=batch_size, pin_memory=True, shuffle=True)
+    t_loss, t_acc, v_acc, v_count, t_count = 0, 0, 0, 0, 0
     for i in range(n_minibatches):
         for batch, labels in train_loader:
             batch, labels = batch.to(device), labels.to(device)
+            loss = agent.update(batch, labels)
+            t_loss += loss
+            with torch.no_grad():
+                for val_batch, val_labels in validation_loader:
+                    pred_val = agent.predict(val_batch)
+                    v_acc += accuracy(pred_val, val_labels)
+                    v_count += 1
+                    pred_train = agent.predict(batch)
+                    t_acc += accuracy(pred_train, labels)
+                    t_count += 1
+                v_acc = v_acc / v_count
+                t_acc = t_acc / t_count
+            if i % 10 == 9:
+                t_loss, t_acc, v_acc = t_loss / 10, t_acc / 10, v_acc / 10
+                eval = {"val_acc": v_acc, "train_acc": t_acc, "train_loss": t_loss}
+                tensorboard_eval.write_episode_data(i, eval)
+                print(f"Epoch {i + 1} --> Training Loss: {t_loss}, Training Accuracy: {t_acc} "
+                      f"Validation Accuracy: {v_acc}")
+                t_loss, t_acc, v_acc = 0, 0, 0
+
+    model_dir = agent.save(os.path.join(model_dir, "agent.pt"))
+    print(f"Model saved in file: {model_dir}")
+
