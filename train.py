@@ -15,7 +15,7 @@ global device
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
-def read_data(dataset_dir= "./data", frac: int = 0.1) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+def read_data(dataset_dir= "./data", frac: int = 0.05) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     To read the data from zip file
     Args:
@@ -77,7 +77,7 @@ def train_model(training_dataset: TensorDataset, validation_dataset: TensorDatas
     train_loader = DataLoader(training_dataset, sampler=sampler, batch_size=batch_size)
     validation_loader = DataLoader(validation_dataset, batch_size=batch_size)
     data_size = float(len(train_loader.dataset))
-    iteration_count = round(data_size/batch_size +1)
+    iteration_count = round(data_size/batch_size-1)
     t_loss = 0
     t_acc = []
     v_acc = []
