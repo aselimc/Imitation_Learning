@@ -1,7 +1,5 @@
 import numpy as np
 from typing import List
-from typing import Tuple
-
 import torch
 
 STRAIGHT = 0
@@ -106,7 +104,7 @@ def id_to_action(action_id: int, max_speed: int = 0.8) -> np.ndarray:
         return np.array([0.0, 0.0, 0.0])
 
 
-def history_stack(x: np.ndarray, history_length: int) -> Tuple[np.ndarray, np.ndarray]:
+def history_stack(x: torch.Tensor, history_length: int) -> torch.Tensor:
     bs = x.shape[0]
     init = 0
     latter = init + history_length
@@ -123,7 +121,7 @@ def history_stack(x: np.ndarray, history_length: int) -> Tuple[np.ndarray, np.nd
     return new_x
 
 
-def accuracy(predictions: torch.Tensor, labels: torch.Tensor):
+def accuracy(predictions: torch.Tensor, labels: torch.Tensor) -> float:
     predictions = predictions.detach().cpu().argmax(1)
     labels = labels.detach().cpu()
     scores = torch.zeros_like(labels)

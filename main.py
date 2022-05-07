@@ -1,8 +1,6 @@
 import argparse
 import sys
 
-import torch
-
 from train import *
 
 

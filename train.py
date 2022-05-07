@@ -1,5 +1,3 @@
-import os
-import torch
 import pickle
 import gzip
 from utils import *
@@ -8,7 +6,10 @@ from typing import Tuple
 from tensorboard_evaluation import *
 from torch.utils.data import DataLoader, TensorDataset
 from agent.bc_agent import BCAgent
+
 import numpy as np
+import os
+import torch
 
 global device
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
