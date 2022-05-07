@@ -26,7 +26,7 @@ def read_data(dataset_dir: AnyStr = "./data", frac: int = 0.1) -> Tuple[np.ndarr
     """
     data_file = os.path.join(dataset_dir, "data.pkl.gzip")
     data = pickle.load(gzip.open(data_file, "rb"))
-    x, y = np.array(data["state"], dtype=np.float), np.array(data["action"], dtype=np.float)
+    x, y = np.array(data["state"], dtype="float32"), np.array(data["action"], dtype="float32")
     length = x.shape[0]
     x_train, y_train = x[:int((1 - frac) * length)], y[:int((1 - frac) * length)]
     x_valid, y_valid = x[int((1 - frac) * length):], y[int((1 - frac) * length):]
