@@ -15,7 +15,7 @@ global device
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
-def read_data(dataset_dir= "./data", frac: int = 0.1) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+def read_data(dataset_dir= "./data", frac: int = 0.05) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     To read the data from zip file
     Args:
@@ -37,8 +37,8 @@ def read_data(dataset_dir= "./data", frac: int = 0.1) -> Tuple[np.ndarray, np.nd
 
 def preprocessing(x_train: np.ndarray, y_train: np.ndarray, x_valid: np.ndarray, y_valid: np.ndarray, save: bool = False
                   , history_length: int = 1):
-    x_train = image_processing(x_train)
-    x_valid = image_processing(x_valid)
+    x_train = rgb2gray(x_train)
+    x_valid = rgb2gray(x_valid)
     y_train = torch.LongTensor([action_to_id(action) for action in y_train]).to(device)
     y_valid = torch.HalfTensor([action_to_id(action) for action in y_valid]).to(device)
     class_sample_count = torch.ShortTensor([len(torch.where(y_train == t)[0]) for t in torch.unique(y_train)])
@@ -88,10 +88,8 @@ def train_model(training_dataset: TensorDataset, validation_dataset: TensorDatas
             z = 0
             with torch.no_grad():
                 for val_batch, val_labels in validation_loader:
-                    if z<3:
-                        pred_val = agent.predict(val_batch)
-                        v_acc.append(accuracy(pred_val, val_labels))
-                    z += 1
+                    pred_val = agent.predict(val_batch)
+                    v_acc.append(accuracy(pred_val, val_labels))
                 pred_train = agent.predict(batch)
                 t_acc.append(accuracy(pred_train, labels))
             if i % 10 == 9:
