@@ -88,7 +88,7 @@ def train_model(training_dataset: TensorDataset, validation_dataset: TensorDatas
             z = 0
             with torch.no_grad():
                 for val_batch, val_labels in validation_loader:
-                    if z<4:
+                    if z<3:
                         pred_val = agent.predict(val_batch)
                         v_acc.append(accuracy(pred_val, val_labels))
                     z += 1
