@@ -85,7 +85,6 @@ def train_model(training_dataset: TensorDataset, validation_dataset: TensorDatas
         for i, (batch, labels) in enumerate(train_loader):
             loss = agent.update(batch, labels)
             t_loss += loss
-            z = 0
             with torch.no_grad():
                 for val_batch, val_labels in validation_loader:
                     pred_val = agent.predict(val_batch)
@@ -101,6 +100,6 @@ def train_model(training_dataset: TensorDataset, validation_dataset: TensorDatas
                 t_loss = 0
                 t_acc, v_acc = [], []
 
-    model_dir = agent.save(os.path.join(model_dir, "agent.pt"))
+    model_dir = agent.save(os.path.join(model_dir, "agent_3.pt"))
     print(f"Model saved in file: {model_dir}")
 
