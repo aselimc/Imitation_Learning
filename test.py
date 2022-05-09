@@ -25,7 +25,7 @@ def run_episode(env, agent, hl, rendering=True, max_timesteps=2000):
     env.viewer.window.dispatch_events()
     counter = 0
     while True:
-        state = rgb2gray(state)
+        state = image_processing(state)
         if step == 0:
             state_1, state_2, state_3, state_4 = state, state, state, state
 
@@ -40,7 +40,7 @@ def run_episode(env, agent, hl, rendering=True, max_timesteps=2000):
             hist = hist_5
 
         a = agent.predict(hist).detach().cpu().numpy().argmax(1)
-        if np.array_equal(state, state_1) and np.array_equal(state, state_2):
+        if np.array_equal(state, state_1):
             counter = 10
             print("Agent got stuck, initial push is given to continue")
         if counter > 0:
@@ -73,9 +73,9 @@ if __name__ == "__main__":
 
     n_test_episodes = 15  # number of episodes to test
 
-    hl = 5
+    hl = 1
     agent = BCAgent(history_length=hl, lr=1e-4)
-    agent.load("models/agent_5.pt")
+    agent.load("models/agent.pt")
 
     env = gym.make('CarRacing-v0').unwrapped
 
