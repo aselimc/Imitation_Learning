@@ -93,9 +93,9 @@ def id_to_action(action_id: int, max_speed: int = 0.8) -> np.ndarray:
     List of cont. actions
     """
     if action_id == LEFT:
-        return np.array([-1.0, 0.0, 0.05])
+        return np.array([-1.0, 0.0, 0.04])
     elif action_id == RIGHT:
-        return np.array([1.0, 0.0, 0.05])
+        return np.array([1.0, 0.0, 0.04])
     elif action_id == ACCELERATE:
         return np.array([0.0, max_speed, 0.0])
     elif action_id == BRAKE:

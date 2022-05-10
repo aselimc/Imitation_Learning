@@ -100,6 +100,6 @@ def train_model(training_dataset: TensorDataset, validation_dataset: TensorDatas
                 t_loss = 0
                 t_acc, v_acc = [], []
 
-    model_dir = agent.save(os.path.join(model_dir, "agent_3.pt"))
+    model_dir = agent.save(os.path.join(model_dir, "agent_5.pt"))
     print(f"Model saved in file: {model_dir}")
 
