@@ -40,12 +40,15 @@ def run_episode(env, agent, hl, rendering=True, max_timesteps=2000):
             hist = hist_5
 
         a = agent.predict(hist).detach().cpu().numpy().argmax(1)
+        ##################################################################
+        # OVER-WRITING AGENT DUE TO PREVENTING AGENT BEING STUCK SOMETIMES
         if np.array_equal(state, state_1):
-            counter = 10
+            counter = 15
             print("Agent got stuck, initial push is given to continue")
         if counter > 0:
             a = 3
             counter -= 1
+        ###################################################################
         a = id_to_action(a)
         next_state, r, done, info = env.step(a)
         if step > 1:
@@ -73,9 +76,9 @@ if __name__ == "__main__":
 
     n_test_episodes = 15  # number of episodes to test
 
-    hl = 1
+    hl = 5
     agent = BCAgent(history_length=hl, lr=1e-4)
-    agent.load("models/agent.pt")
+    agent.load("models/agent_5.pt")
 
     env = gym.make('CarRacing-v0').unwrapped
 
